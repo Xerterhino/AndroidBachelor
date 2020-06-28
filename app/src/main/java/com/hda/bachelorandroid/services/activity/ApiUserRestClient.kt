@@ -4,6 +4,7 @@ import android.util.Log
 import android.view.View
 import com.hda.bachelorandroid.services.activity.model.Activity
 import com.hda.bachelorandroid.services.activity.model.CreateActivityBody
+import com.hda.bachelorandroid.services.activity.model.UpdateActivityBody
 import com.hda.bachelorandroid.services.model.Post
 import com.hda.bachelorandroid.services.network.NetworkClient
 import com.hda.bachelorandroid.services.network.RetrofitEventListener
@@ -69,6 +70,25 @@ class ApiUserRestClient {
 
 
         val apiUserCall = mApiUser!!.deleteActivity(activityId)
+
+        apiUserCall.enqueue(object : Callback<Activity> {
+           override fun onFailure(call: Call<Activity>?, t: Throwable?) {
+                retrofitEventListener.onError(call, t)
+            }
+            override fun onResponse(call: Call<Activity>, response: Response<Activity>) {
+                if (response?.body() != null) {
+                    retrofitEventListener.onSuccess(call, response?.body())
+                }
+            }
+        })
+    }
+    fun updateActivity(retrofitEventListener: RetrofitEventListener, activityId: String, name: String, duration: String, finished: Boolean) {
+        val retrofit = NetworkClient.retrofitClient
+        mApiUser = retrofit.create<APIActivity>(APIActivity::class.java)
+
+
+        val updateBody = UpdateActivityBody(name, duration, finished)
+        val apiUserCall = mApiUser!!.updateActivity(activityId, updateBody)
 
         apiUserCall.enqueue(object : Callback<Activity> {
            override fun onFailure(call: Call<Activity>?, t: Throwable?) {

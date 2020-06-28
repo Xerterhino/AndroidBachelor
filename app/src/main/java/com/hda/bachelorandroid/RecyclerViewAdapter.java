@@ -104,7 +104,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.itemCardInnerLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startDetailViewActivity(v, position,  SystemClock.elapsedRealtime() - holder.durationChronometer.getBase());
+                startDetailViewActivity(v, position,  Long.parseLong(mDataset.get(position).getDuration()));
             }
         });
 
@@ -116,13 +116,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         Intent intent = new Intent(view.getContext(), DetailActivity.class);
         intent.putExtra("detailName", mDataset.get(index).getName());
         intent.putExtra("detailDuration", currentDuration);
+        intent.putExtra("detailId", mDataset.get(index).get_id());
         view.getContext().startActivity(intent);
     }
 
     public void delelteActivity(int index) {
         deleteActivityCall(mDataset.get(index).get_id());
-
-
     }
 
 
