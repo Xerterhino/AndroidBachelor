@@ -2,7 +2,6 @@ package com.hda.bachelorandroid;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlarmManager;
 import android.app.Notification;
@@ -10,6 +9,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
@@ -19,6 +19,21 @@ public class MainActivity extends AppCompatActivity {
     public static final String NOTIFICATION_CHANNEL_ID = "10001" ;
     private final static String default_notification_channel_id = "default" ;
     Button buttonToRooms;
+
+    Handler handler = new Handler();
+    private Runnable runnableCode = new Runnable() {
+        @Override
+        public void run() {
+            // Do something here on the main thread
+            Log.d("Handlers", "Called on main thread");
+            // Repeat this the same runnable code block again another 2 seconds
+            // 'this' is referencing the Runnable object
+            scheduleNotification(getNotification( "15 second delay" ) , 0 );
+
+            handler.postDelayed(this, 15000);
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        scheduleNotification(getNotification( "10 second delay" ) , 1000 );
+        handler.post(runnableCode);
     }
 
     /** Called when the user taps the Send button */
