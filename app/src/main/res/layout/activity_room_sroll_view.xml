@@ -8,11 +8,10 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/RoomRecyclerView"
-        android:layout_width="356dp"
-        android:layout_height="531dp"
-        android:layout_marginStart="24dp"
+        android:layout_width="409dp"
+        android:layout_height="546dp"
+        android:layout_marginStart="4dp"
         android:layout_weight=".70"
-        android:background="#C8C7C7"
         android:clipChildren="true"
         android:clipToPadding="true"
         android:maxHeight="100dp"
@@ -24,7 +23,7 @@
         app:layout_constraintBottom_toTopOf="@+id/textInputLayout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayout"
@@ -38,8 +37,8 @@
             android:id="@+id/add_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:hint="@string/add_activity" />
+            android:hint="@string/add_activity"
+            android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button

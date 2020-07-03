@@ -6,7 +6,7 @@ import android.app.NotificationManager ;
 import android.content.BroadcastReceiver ;
 import android.content.Context ;
 import android.content.Intent ;
-import static com.hda.bachelorandroid.MainActivity. NOTIFICATION_CHANNEL_ID ;
+import static com.hda.bachelorandroid.RoomSrollViewActivity.NOTIFICATION_CHANNEL_ID;
 
 
 public class NotificationPublisher extends BroadcastReceiver {

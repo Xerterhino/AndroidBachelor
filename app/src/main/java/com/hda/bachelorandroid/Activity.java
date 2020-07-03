@@ -6,14 +6,6 @@ public class Activity {
     private Boolean finished;
     private String _id ;
 
-
-
-
-//    public Activity(String name, String duration) {
-//        this.name = name;
-//        this.duration = duration;
-//        this.finished = false;
-//    }
     public Activity(String name, String duration, String _id) {
         this.name = name;
         this.duration = duration;

@@ -5,22 +5,16 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:layout_marginTop="10dp"
-    android:layout_marginStart="10dp"
-    android:layout_marginEnd="10dp"
     android:layout_marginBottom="10dp"
-    android:background="@drawable/back"
     android:layout_gravity="center"
-
-
     >
-
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginEnd="30dp"
         android:layout_weight="1"
         android:contentDescription="Activity"
         app:srcCompat="@android:drawable/ic_lock_idle_alarm" />
@@ -49,8 +43,7 @@
             android:id="@+id/message_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
+            android:paddingStart="16dp"
             android:textSize="12sp"
             android:layout_weight="1"
             android:layout_gravity="center"

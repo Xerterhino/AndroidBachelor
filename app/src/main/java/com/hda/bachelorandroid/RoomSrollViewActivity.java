@@ -1,23 +1,26 @@
 package com.hda.bachelorandroid;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.gson.Gson;
-import com.hda.bachelorandroid.services.activity.model.BaseActivity;
-import com.hda.bachelorandroid.services.model.Post;
 import com.hda.bachelorandroid.services.network.RetrofitEventListener;
 import com.hda.bachelorandroid.services.activity.ApiUserRestClient;
 
@@ -31,6 +34,24 @@ import kotlin.jvm.internal.Intrinsics;
 import retrofit2.Call;
 
 public class RoomSrollViewActivity extends AppCompatActivity {
+    public static final String NOTIFICATION_CHANNEL_ID = "10001" ;
+    private final static String default_notification_channel_id = "default" ;
+    Button buttonToRooms;
+
+    Handler handler = new Handler();
+    private Runnable runnableCode = new Runnable() {
+        @Override
+        public void run() {
+            // Do something here on the main thread
+            Log.d("Handlers", "Called on main thread");
+            // Repeat this the same runnable code block again another 2 seconds
+            // 'this' is referencing the Runnable object
+            scheduleNotification(getNotification( "5 Minutes delay" ) , 0 );
+
+            handler.postDelayed(this, 300000);
+        }
+    };
+
     private RecyclerView recyclerView;
     private TextInputEditText textInput;
     private Button addButton;
@@ -67,6 +88,9 @@ public class RoomSrollViewActivity extends AppCompatActivity {
 
         mAdapter = new RecyclerViewAdapter(data);
         recyclerView.setAdapter(mAdapter);
+
+        handler.post(runnableCode);
+
     }
 
     @Override
@@ -92,10 +116,8 @@ public class RoomSrollViewActivity extends AppCompatActivity {
         ApiUserRestClient.Companion.getInstance().getUserList((RetrofitEventListener)(new RetrofitEventListener() {
             @Override
             public void onSuccess(@NotNull Call call, @NotNull Object response) {
-                System.out.println("RESPONSEEEEEEEEEEEEEEE " + response);
 
                 List var10002 = ((List<Activity>)response);
-                System.out.println(var10002);
                 addItemsAfterFetch(var10002);
             }
 
@@ -150,23 +172,31 @@ public class RoomSrollViewActivity extends AppCompatActivity {
         String itemText = Objects.requireNonNull(textInput.getText()).toString();
 
         if(itemText.length() > 0){
-//          data.add(new Activity(itemText, "14:11:32"));
-//          mAdapter.notifyItemInserted(data.size() - 1);
-//          recyclerView.scrollToPosition(data.size() - 1);
             createActivityCall(itemText, "0", v);
-
-//            Intent intent = new Intent(v.getContext(), DetailActivity.class);
-//            intent.putExtra("detailName", createdActivity.getName());
-//            intent.putExtra("detailDuration", createdActivity.getDuration());
-//            intent.putExtra("detailId", createdActivity.get_id());
-//            v.getContext().startActivity(intent);
-
-
-
-//            SystemClock.sleep(3000);
-//            callActivityList();
-//            textInput.setText("");
             closeKeyBoard();
         }
     }
+
+
+    private void scheduleNotification (Notification notification , int delay) {
+        Intent notificationIntent = new Intent( this, NotificationPublisher. class ) ;
+        notificationIntent.putExtra(NotificationPublisher. NOTIFICATION_ID , 1 ) ;
+        notificationIntent.putExtra(NotificationPublisher. NOTIFICATION , notification) ;
+        PendingIntent pendingIntent = PendingIntent. getBroadcast ( this, 0 , notificationIntent , PendingIntent. FLAG_UPDATE_CURRENT ) ;
+        long futureInMillis = SystemClock. elapsedRealtime () + delay ;
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context. ALARM_SERVICE ) ;
+        assert alarmManager != null;
+        alarmManager.set(AlarmManager. ELAPSED_REALTIME_WAKEUP , futureInMillis , pendingIntent) ;
+    }
+    private Notification getNotification (String content) {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder( this, default_notification_channel_id ) ;
+        builder.setContentTitle( "Scheduled Notification" ) ;
+        builder.setContentText(content) ;
+        builder.setSmallIcon(R.drawable. ic_launcher_foreground ) ;
+        builder.setAutoCancel( true ) ;
+        builder.setChannelId( NOTIFICATION_CHANNEL_ID ) ;
+        return builder.build() ;
+    }
+
+
 }

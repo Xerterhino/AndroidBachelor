@@ -20,9 +20,7 @@ import retrofit2.Call;
 public class DetailActivity extends AppCompatActivity {
     private EditText detailTitle;
     private Button startButton;
-    private Button stopButton;
     private Button resetButton;
-    private Button resumeButton;
     private Button saveButton;
     private Chronometer chronometer;
     private boolean isRunning = false;
@@ -38,12 +36,11 @@ public class DetailActivity extends AppCompatActivity {
         String name = intent.getStringExtra("detailName");
         detailTitle = (EditText) findViewById(R.id.DetailTitle);
         startButton = (Button) findViewById(R.id.button_start);
-        stopButton = (Button) findViewById(R.id.button_stop);
         resetButton = (Button) findViewById(R.id.button_reset);
-        resumeButton = (Button) findViewById(R.id.button_resume);
         saveButton = (Button) findViewById(R.id.save_button);
 
         detailTitle.setText(name);
+        startButton.setText("Start");
 
         chronometer = findViewById(R.id.chronometer);
 
@@ -57,25 +54,21 @@ public class DetailActivity extends AppCompatActivity {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startChronometer(v, intent.getLongExtra("detailDuration", 0));
+                if(isRunning){
+                    startButton.setText("Start");
+                    stopChronometer(v);
+                } else {
+                    startButton.setText("Stop");
+                    isRunning = true;
+                    startChronometer(v, intent.getLongExtra("detailDuration", 0));
+                }
+
             }
         });
         resetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 resetChronometer(v);
-            }
-        });
-        resumeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                resumeChronometer(v);
-            }
-        });
-        stopButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                stopChronometer(v);
             }
         });
         saveButton.setOnClickListener(new View.OnClickListener() {
@@ -103,8 +96,14 @@ public class DetailActivity extends AppCompatActivity {
 
 
     public void resetChronometer(View view) {
-        chronometer.stop();
+
+//        chronometer.stop();
+//        chronometer.setBase(SystemClock.elapsedRealtime());
+        stopChronometer(view);
         chronometer.setBase(SystemClock.elapsedRealtime());
+
+        startButton.setText("Start");
+        isRunning = false;
         pastTime = 0;
     }
 

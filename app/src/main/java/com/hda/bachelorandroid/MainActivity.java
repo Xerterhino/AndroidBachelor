@@ -16,23 +16,23 @@ import android.view.View;
 import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
-    public static final String NOTIFICATION_CHANNEL_ID = "10001" ;
-    private final static String default_notification_channel_id = "default" ;
+//    public static final String NOTIFICATION_CHANNEL_ID = "10001" ;
+//    private final static String default_notification_channel_id = "default" ;
     Button buttonToRooms;
-
-    Handler handler = new Handler();
-    private Runnable runnableCode = new Runnable() {
-        @Override
-        public void run() {
-            // Do something here on the main thread
-            Log.d("Handlers", "Called on main thread");
-            // Repeat this the same runnable code block again another 2 seconds
-            // 'this' is referencing the Runnable object
-            scheduleNotification(getNotification( "15 second delay" ) , 0 );
-
-            handler.postDelayed(this, 15000);
-        }
-    };
+//
+//    Handler handler = new Handler();
+//    private Runnable runnableCode = new Runnable() {
+//        @Override
+//        public void run() {
+//            // Do something here on the main thread
+//            Log.d("Handlers", "Called on main thread");
+//            // Repeat this the same runnable code block again another 2 seconds
+//            // 'this' is referencing the Runnable object
+//            scheduleNotification(getNotification( "5 Minutes delay" ) , 0 );
+//
+//            handler.postDelayed(this, 300000);
+//        }
+//    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        handler.post(runnableCode);
+//        handler.post(runnableCode);
     }
 
     /** Called when the user taps the Send button */
@@ -56,26 +56,26 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-
-    private void scheduleNotification (Notification notification , int delay) {
-        Intent notificationIntent = new Intent( this, NotificationPublisher. class ) ;
-        notificationIntent.putExtra(NotificationPublisher. NOTIFICATION_ID , 1 ) ;
-        notificationIntent.putExtra(NotificationPublisher. NOTIFICATION , notification) ;
-        PendingIntent pendingIntent = PendingIntent. getBroadcast ( this, 0 , notificationIntent , PendingIntent. FLAG_UPDATE_CURRENT ) ;
-        long futureInMillis = SystemClock. elapsedRealtime () + delay ;
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context. ALARM_SERVICE ) ;
-        assert alarmManager != null;
-        alarmManager.set(AlarmManager. ELAPSED_REALTIME_WAKEUP , futureInMillis , pendingIntent) ;
-    }
-    private Notification getNotification (String content) {
-        NotificationCompat.Builder builder = new NotificationCompat.Builder( this, default_notification_channel_id ) ;
-        builder.setContentTitle( "Scheduled Notification" ) ;
-        builder.setContentText(content) ;
-        builder.setSmallIcon(R.drawable. ic_launcher_foreground ) ;
-        builder.setAutoCancel( true ) ;
-        builder.setChannelId( NOTIFICATION_CHANNEL_ID ) ;
-        return builder.build() ;
-    }
-
+//
+//    private void scheduleNotification (Notification notification , int delay) {
+//        Intent notificationIntent = new Intent( this, NotificationPublisher. class ) ;
+//        notificationIntent.putExtra(NotificationPublisher. NOTIFICATION_ID , 1 ) ;
+//        notificationIntent.putExtra(NotificationPublisher. NOTIFICATION , notification) ;
+//        PendingIntent pendingIntent = PendingIntent. getBroadcast ( this, 0 , notificationIntent , PendingIntent. FLAG_UPDATE_CURRENT ) ;
+//        long futureInMillis = SystemClock. elapsedRealtime () + delay ;
+//        AlarmManager alarmManager = (AlarmManager) getSystemService(Context. ALARM_SERVICE ) ;
+//        assert alarmManager != null;
+//        alarmManager.set(AlarmManager. ELAPSED_REALTIME_WAKEUP , futureInMillis , pendingIntent) ;
+//    }
+//    private Notification getNotification (String content) {
+//        NotificationCompat.Builder builder = new NotificationCompat.Builder( this, default_notification_channel_id ) ;
+//        builder.setContentTitle( "Scheduled Notification" ) ;
+//        builder.setContentText(content) ;
+//        builder.setSmallIcon(R.drawable. ic_launcher_foreground ) ;
+//        builder.setAutoCancel( true ) ;
+//        builder.setChannelId( NOTIFICATION_CHANNEL_ID ) ;
+//        return builder.build() ;
+//    }
+//
 
 }

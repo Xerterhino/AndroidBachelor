@@ -8,28 +8,35 @@
 
     <EditText
         android:id="@+id/DetailTitle"
-        android:layout_width="152dp"
-        android:layout_height="wrap_content"
+        android:layout_width="356dp"
+        android:layout_height="48dp"
         android:text="TextView"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.472"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.115" />
+        app:layout_constraintVertical_bias="0.695" />
 
     <Chronometer
         android:id="@+id/chronometer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:background="#b2dfdb"
+        android:layout_width="328dp"
+        android:layout_height="65dp"
+        android:background="#00FFFFFF"
+        android:scaleY="2"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textColor="#ad1457"
+        android:textColor="#000000"
+        android:textScaleX="2"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/DetailTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.832" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -42,7 +49,7 @@
         app:layout_constraintTop_toBottomOf="@+id/DetailTitle">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -57,31 +64,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 android:layout_marginTop="408dp"
-                android:onClick="startChronometer"
-                android:text="Start" />
-
-            <Button
-                android:id="@+id/button_stop"
-                style="@style/Widget.AppCompat.Button.Colored"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="15dp"
-                android:onClick="stopChronometer"
-                android:text="Stop" />
-
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/DetailTitle">
+                />
 
             <Button
                 android:id="@+id/button_reset"
@@ -94,26 +77,17 @@
                 android:text="Reset" />
 
             <Button
-                android:id="@+id/button_resume"
+                android:id="@+id/save_button"
                 style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="15dp"
-                android:onClick="resumeChronometer"
-                android:text="Resume" />
+                android:layout_marginTop="408dp"
+                android:text="Save" />
+
         </LinearLayout>
+
     </LinearLayout>
 
-    <Button
-        android:id="@+id/save_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="SAVE"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
