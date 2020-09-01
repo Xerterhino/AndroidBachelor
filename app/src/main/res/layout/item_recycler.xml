@@ -39,16 +39,16 @@
              />
 
     </LinearLayout>
-        <ImageButton
-            android:id="@+id/message_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingStart="16dp"
-            android:textSize="12sp"
-            android:layout_weight="1"
-            android:layout_gravity="center"
 
-            android:background="@android:color/white"
-            app:srcCompat="@android:drawable/ic_delete"
-            android:contentDescription="Remove Activity" />
+    <ImageButton
+        android:id="@+id/message_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="15"
+
+        android:background="@android:color/transparent"
+        android:contentDescription="Remove Activity"
+        android:textSize="12sp"
+        app:srcCompat="@android:drawable/ic_delete" />
     </LinearLayout>

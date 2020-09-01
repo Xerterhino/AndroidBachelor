@@ -33,24 +33,43 @@ import java.util.Objects;
 import kotlin.jvm.internal.Intrinsics;
 import retrofit2.Call;
 
+@SuppressWarnings("ALL")
 public class RoomSrollViewActivity extends AppCompatActivity {
     public static final String NOTIFICATION_CHANNEL_ID = "10001" ;
     private final static String default_notification_channel_id = "default" ;
     Button buttonToRooms;
 
     Handler handler = new Handler();
+
     private Runnable runnableCode = new Runnable() {
         @Override
         public void run() {
-            // Do something here on the main thread
-            Log.d("Handlers", "Called on main thread");
-            // Repeat this the same runnable code block again another 2 seconds
-            // 'this' is referencing the Runnable object
-            scheduleNotification(getNotification( "5 Minutes delay" ) , 0 );
-
+            scheduleNotification(getNotification( "Log something today!" ) , 0 );
             handler.postDelayed(this, 300000);
         }
     };
+
+
+    private void scheduleNotification (Notification notification , int delay) {
+        Intent notificationIntent = new Intent( this, NotificationPublisher. class ) ;
+        notificationIntent.putExtra(NotificationPublisher. NOTIFICATION_ID , 1 ) ;
+        notificationIntent.putExtra(NotificationPublisher. NOTIFICATION , notification) ;
+        PendingIntent pendingIntent = PendingIntent. getBroadcast ( this, 0 , notificationIntent,
+                PendingIntent. FLAG_UPDATE_CURRENT ) ;
+        long futureInMillis = SystemClock. elapsedRealtime () + delay ;
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context. ALARM_SERVICE ) ;
+        assert alarmManager != null;
+        alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME, futureInMillis, 60000, pendingIntent );
+    }
+    private Notification getNotification (String content) {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder( this, default_notification_channel_id ) ;
+        builder.setContentTitle( "Check your activities!" ) ;
+        builder.setContentText(content) ;
+        builder.setSmallIcon(R.drawable. ic_launcher_foreground ) ;
+        builder.setAutoCancel( true ) ;
+        builder.setChannelId( NOTIFICATION_CHANNEL_ID ) ;
+        return builder.build() ;
+    }
 
     private RecyclerView recyclerView;
     private TextInputEditText textInput;
@@ -124,7 +143,6 @@ public class RoomSrollViewActivity extends AppCompatActivity {
             public void onError(@NotNull Call call, @NotNull Throwable t) {
                 Intrinsics.checkParameterIsNotNull(call, "call");
                 Intrinsics.checkParameterIsNotNull(t, "t");
-                System.out.println("ERRORRRRRRRRRRRRRRRRRRRRR"  + t);
             }
         }));
     }
@@ -133,7 +151,6 @@ public class RoomSrollViewActivity extends AppCompatActivity {
     ApiUserRestClient.Companion.getInstance().savePostActivity((RetrofitEventListener)(new RetrofitEventListener() {
         @Override
         public void onSuccess(@NotNull Call call, @NotNull Object response) {
-            System.out.println("RESPONSEEEEEEEEEEEEEEE " + response);
             com.hda.bachelorandroid.services.activity.model.Activity ac = (com.hda.bachelorandroid.services.activity.model.Activity) response;
 
             Intent intent = new Intent(v.getContext(), DetailActivity.class);
@@ -177,26 +194,24 @@ public class RoomSrollViewActivity extends AppCompatActivity {
         }
     }
 
-
-    private void scheduleNotification (Notification notification , int delay) {
-        Intent notificationIntent = new Intent( this, NotificationPublisher. class ) ;
-        notificationIntent.putExtra(NotificationPublisher. NOTIFICATION_ID , 1 ) ;
-        notificationIntent.putExtra(NotificationPublisher. NOTIFICATION , notification) ;
-        PendingIntent pendingIntent = PendingIntent. getBroadcast ( this, 0 , notificationIntent , PendingIntent. FLAG_UPDATE_CURRENT ) ;
-        long futureInMillis = SystemClock. elapsedRealtime () + delay ;
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context. ALARM_SERVICE ) ;
-        assert alarmManager != null;
-        alarmManager.set(AlarmManager. ELAPSED_REALTIME_WAKEUP , futureInMillis , pendingIntent) ;
-    }
-    private Notification getNotification (String content) {
-        NotificationCompat.Builder builder = new NotificationCompat.Builder( this, default_notification_channel_id ) ;
-        builder.setContentTitle( "Scheduled Notification" ) ;
-        builder.setContentText(content) ;
-        builder.setSmallIcon(R.drawable. ic_launcher_foreground ) ;
-        builder.setAutoCancel( true ) ;
-        builder.setChannelId( NOTIFICATION_CHANNEL_ID ) ;
-        return builder.build() ;
-    }
-
-
+//
+//    private void scheduleNotification (Notification notification , int delay) {
+//        Intent notificationIntent = new Intent( this, NotificationPublisher. class ) ;
+//        notificationIntent.putExtra(NotificationPublisher. NOTIFICATION_ID , 1 ) ;
+//        notificationIntent.putExtra(NotificationPublisher. NOTIFICATION , notification) ;
+//        PendingIntent pendingIntent = PendingIntent. getBroadcast ( this, 0 , notificationIntent , PendingIntent. FLAG_UPDATE_CURRENT ) ;
+//        long futureInMillis = SystemClock. elapsedRealtime () + delay ;
+//        AlarmManager alarmManager = (AlarmManager) getSystemService(Context. ALARM_SERVICE ) ;
+//        assert alarmManager != null;
+//        alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME, futureInMillis, 60000, pendingIntent );
+//    }
+//    private Notification getNotification (String content) {
+//        NotificationCompat.Builder builder = new NotificationCompat.Builder( this, default_notification_channel_id ) ;
+//        builder.setContentTitle( "Check your activities!" ) ;
+//        builder.setContentText(content) ;
+//        builder.setSmallIcon(R.drawable. ic_launcher_foreground ) ;
+//        builder.setAutoCancel( true ) ;
+//        builder.setChannelId( NOTIFICATION_CHANNEL_ID ) ;
+//        return builder.build() ;
+//    }
 }

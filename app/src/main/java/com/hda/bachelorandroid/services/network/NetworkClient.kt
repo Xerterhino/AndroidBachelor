@@ -8,7 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object NetworkClient {
 
-    private val BASE_URL = "http://192.168.178.20:8080"
+    private val BASE_URL = "http://192.168.178.44:8080"
     private val TIMEOUT = 10
     var retrofit: Retrofit? = null
     /*

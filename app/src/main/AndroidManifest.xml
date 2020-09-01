@@ -12,12 +12,13 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity
             android:name=".DetailActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Design.Light.NoActionBar"
-
             />
+
         <activity
             android:name=".RoomSrollViewActivity"
             android:screenOrientation="portrait"
@@ -27,11 +28,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-<!--        <activity android:name=".MainActivity"-->
-<!--            android:screenOrientation="portrait"-->
-<!--            >-->
-
-<!--        </activity>-->
         <receiver android:name = ".NotificationPublisher" />
     </application>
 </manifest>

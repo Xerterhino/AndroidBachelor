@@ -113,12 +113,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     public void startDetailViewActivity(View view, int index, long currentDuration) {
+
         Intent intent = new Intent(view.getContext(), DetailActivity.class);
         intent.putExtra("detailName", mDataset.get(index).getName());
         intent.putExtra("detailDuration", currentDuration);
         intent.putExtra("detailId", mDataset.get(index).get_id());
         view.getContext().startActivity(intent);
+
     }
+
+
 
     public void delelteActivity(int index) {
         deleteActivityCall(mDataset.get(index).get_id());

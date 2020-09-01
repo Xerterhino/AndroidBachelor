@@ -4,11 +4,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Chronometer;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.hda.bachelorandroid.services.activity.ApiUserRestClient;
 import com.hda.bachelorandroid.services.network.RetrofitEventListener;
@@ -22,10 +23,14 @@ public class DetailActivity extends AppCompatActivity {
     private Button startButton;
     private Button resetButton;
     private Button saveButton;
-    private Chronometer chronometer;
+    private Button stopButton;
+    private TextView TimerText;
     private boolean isRunning = false;
-    private boolean hasBeenPaused = false;
-    private long pastTime = 0;
+
+
+    long MillisecondTime, StartTime, TimeBuff, UpdateTime = 0L ;
+    Handler handler;
+    int Seconds, Minutes, MilliSeconds ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,49 +41,59 @@ public class DetailActivity extends AppCompatActivity {
         String name = intent.getStringExtra("detailName");
         detailTitle = (EditText) findViewById(R.id.DetailTitle);
         startButton = (Button) findViewById(R.id.button_start);
+        stopButton = (Button) findViewById(R.id.button_stop);
         resetButton = (Button) findViewById(R.id.button_reset);
         saveButton = (Button) findViewById(R.id.save_button);
 
         detailTitle.setText(name);
         startButton.setText("Start");
+        handler = new Handler() ;
+        TimerText = findViewById(R.id.textViewTime);
 
-        chronometer = findViewById(R.id.chronometer);
-
-        chronometer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
-            @Override
-            public void onChronometerTick(Chronometer chronometerChanged) {
-                chronometer = chronometerChanged;
-            }
-        });
 
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                if(isRunning){
-                    startButton.setText("Start");
-                    stopChronometer(v);
-                } else {
-                    startButton.setText("Stop");
-                    isRunning = true;
-                    startChronometer(v, intent.getLongExtra("detailDuration", 0));
-                }
+            public void onClick(View view) {
+
+                StartTime = SystemClock.uptimeMillis();
+                handler.postDelayed(runnable, 0);
+
+            }
+        });
+
+        stopButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                TimeBuff += MillisecondTime;
+
+                handler.removeCallbacks(runnable);
 
             }
         });
         resetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                resetChronometer(v);
+
+                MillisecondTime = 0L ;
+                StartTime = 0L ;
+                TimeBuff = 0L ;
+                UpdateTime = 0L ;
+                Seconds = 0 ;
+                Minutes = 0 ;
+                MilliSeconds = 0 ;
+
+                TimerText.setText("00:00:00");
             }
         });
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(isRunning){
-                    long timeMeasured = SystemClock.elapsedRealtime() - chronometer.getBase();
+                    long timeMeasured = MilliSeconds;
                     updateActivityCall(intent.getStringExtra("detailId"), detailTitle.getText().toString(), String.valueOf(timeMeasured), true);
                 } else {
-                    long timeMeasured = pastTime;
+                    long timeMeasured = MilliSeconds;
                     updateActivityCall(intent.getStringExtra("detailId"), detailTitle.getText().toString(), String.valueOf(timeMeasured), true);
                 }
 
@@ -89,51 +104,42 @@ public class DetailActivity extends AppCompatActivity {
         });
 
 
-        chronometer.setBase(SystemClock.elapsedRealtime() - intent.getLongExtra("detailDuration", 0));
 
         };
 
+    public Runnable runnable = new Runnable() {
 
+        public void run() {
 
-    public void resetChronometer(View view) {
+            MillisecondTime = SystemClock.uptimeMillis() - StartTime;
 
-//        chronometer.stop();
-//        chronometer.setBase(SystemClock.elapsedRealtime());
-        stopChronometer(view);
-        chronometer.setBase(SystemClock.elapsedRealtime());
+            UpdateTime = TimeBuff + MillisecondTime;
 
-        startButton.setText("Start");
-        isRunning = false;
-        pastTime = 0;
-    }
+            Seconds = (int) (UpdateTime / 1000);
 
-    public void resumeChronometer(View view) {
-        chronometer.setBase(SystemClock.elapsedRealtime() - pastTime);
-        chronometer.start();
-        isRunning = true;
-    }
+            Minutes = Seconds / 60;
 
+            Seconds = Seconds % 60;
 
-    public void stopChronometer(View view) {
-        if(isRunning){
-            pastTime = SystemClock.elapsedRealtime() - chronometer.getBase();
-            chronometer.stop();
+            MilliSeconds = (int) (UpdateTime % 1000);
+
+            String s = String.valueOf(MilliSeconds);
+//
+//            s = s.substring(0, s.length() -1);
+            if (s.length() > 1){
+                s = s.substring(0, s.length() -1);
+            }
+
+            TimerText.setText("" + Minutes + ":"
+                    + String.format("%02d", Seconds) + ":"
+                    + s);
+
+            handler.postDelayed(this, 0);
         }
-        isRunning = false;
-        hasBeenPaused = true;
-    }
+
+    };
 
 
-    public void startChronometer(View view, long elapsedTime){
-        if(hasBeenPaused){
-            resumeChronometer(view);
-        } else {
-            chronometer.setBase(SystemClock.elapsedRealtime() - elapsedTime);
-            chronometer.start();
-        }
-        isRunning = true;
-
-    }
 
 
     public void updateActivityCall(String activityId, String name, String duration, Boolean finished) {
